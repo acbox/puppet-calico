@@ -15,6 +15,7 @@ class calico::install (
     '/opt/cni',
     '/opt/cni/bin',
     '/opt/cni/config',
+    '/var/lib/calico',
     '/var/log/calico',
     '/var/log/calico/cni'
   ]

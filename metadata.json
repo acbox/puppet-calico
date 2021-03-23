@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "source": "https://github.com/acbox/puppet-calico",
   "dependencies": [
-    { "name": "puppet-archive", "version_requirement": ">= 4.6.0" },
+    { "name": "puppet-archive", "version_requirement": ">= 4.6.0" }
   ],
   "operatingsystem_support": [
     {
