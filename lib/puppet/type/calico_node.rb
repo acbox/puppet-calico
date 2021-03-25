@@ -15,11 +15,6 @@ calico_node { 'vagrant':
 }
 
 This type provides Puppet with the capabilities to manage Calico nodes
-
-If your type uses autorequires, please document as shown below, else delete
-these lines.
-**Autorequires**:
-* `Package[foo]`
 EOS
   features: [],
   attributes: {
@@ -34,8 +29,9 @@ EOS
       behaviour: :namevar,
     },
     labels: {
-      type: 'Hash[String, String]',
+      type: 'Optional[Hash[String, String]]',
       desc: 'Hash of labels to apply to the node.',
+      default: {}
     },
   },
 )
