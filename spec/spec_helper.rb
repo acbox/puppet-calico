@@ -39,6 +39,13 @@ end
 RSpec.configure do |c|
   c.default_facts = default_facts
   c.before :each do
+    let(:manifest) {
+      <<-EOS
+    include etcd
+    EOS
+    }
+    apply_manifest(manifest, :catch_failures => true)
+
     # set to strictest setting for testing
     # by default Puppet runs at warning level
     Puppet.settings[:strict] = :warning

@@ -69,4 +69,10 @@ extra_gemfiles.each do |gemfile|
     eval(File.read(gemfile), binding)
   end
 end
-# vim: syntax=ruby
+
+group :acceptance do
+  gem "beaker-vagrant",               require: false
+  gem "beaker-rspec",                 require: false
+  gem "beaker-puppet_install_helper", require: false
+  gem "beaker-module_install_helper", require: false
+end
