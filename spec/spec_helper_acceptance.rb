@@ -9,9 +9,10 @@ hosts.each do |host|
   # Install pry-byebug dependencies
   install_package(host, 'make')
   install_package(host, 'gcc')
-  install_package(host, 'git')
+  on(host, '/opt/puppetlabs/puppet/bin/gem install -N pry-byebug')
 
-  # Required third-party modules
+  # Clone third-party Puppet modules from GitHub
+  install_package(host, 'git')
   module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
   modules_fixtures = YAML.load_file(module_root + '/.fixtures.yml')
   modules = modules_fixtures['fixtures']['repositories']

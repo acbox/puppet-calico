@@ -13,7 +13,6 @@ class Puppet::Provider::CalicoIpPool::CalicoIpPool < Puppet::ResourceApi::Simple
   end
 
   def create(context, name, should)
-    binding.pry
     context.notice("Creating '#{name}' with #{should.inspect}")
     calicoctl(:create, :ip_pool, should)
   end

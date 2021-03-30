@@ -9,7 +9,7 @@ describe 'calico install' do
     apply_manifest(manifest, :catch_failures => true)
   end
 
-  let(:manifest) do
+  let(:manifest_calico) do
     <<-EOS
     class { '::calico':
       # Calico CNI plugin binary patched for Nomad support
@@ -18,12 +18,88 @@ describe 'calico install' do
     EOS
   end
 
+  let(:manifest_node) do
+    <<-EOS
+    calico_node { 'vagrant':
+    }
+    EOS
+  end
+
+  let(:manifest_ippool) do
+    <<-EOS
+    calico_ip_pool { 'myippool':
+      cidr => '10.0.2.0/24', # https://www.virtualbox.org/manual/UserManual.html#nat-address-config
+    }
+    EOS
+  end
+
+  let(:manifest_host_endpoint) do
+    <<-EOS
+    calico_host_endpoint { 'vagrant':
+      expectedips => ['10.0.2.15'],
+      node        => 'vagrant',
+      labels      => { 'role' => 'host' }
+    }
+    EOS
+  end
+
+  let(:manifest_global_network_policy) do
+    <<-EOS
+    calico_global_network_policy { 'host-egress-all':
+      selector => 'role == "host"',
+      order    => 0,
+      types    => [ 'Egress' ],
+      ingress  => [],
+      egress   => [
+        { action => 'Allow', protocol => 'UDP', destination => {} },
+        { action => 'Allow', protocol => 'TCP', destination => {} },
+      ],
+    }
+    EOS
+  end
+
   it 'should apply without errors' do
-    apply_manifest(manifest, :catch_failures => true)
+    apply_manifest(manifest_calico, :catch_failures => true)
   end
 
   it 'should apply a second time without changes' do
-    @result = apply_manifest(manifest)
+    @result = apply_manifest(manifest_calico, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  it 'should apply without errors' do
+    apply_manifest(manifest_node, :catch_failures => true)
+  end
+
+  it 'should apply a second time without changes' do
+    @result = apply_manifest(manifest_node, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  it 'should apply without errors' do
+    apply_manifest(manifest_ippool, :catch_failures => true)
+  end
+
+  it 'should apply a second time without changes' do
+    @result = apply_manifest(manifest_ippool, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  it 'should apply without errors' do
+    apply_manifest(manifest_host_endpoint, :catch_failures => true)
+  end
+
+  it 'should apply a second time without changes' do
+    @result = apply_manifest(manifest_host_endpoint, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  it 'should apply without errors' do
+    @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
+  end
+
+  it 'should apply a second time without changes' do
+    @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 end
