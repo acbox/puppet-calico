@@ -1,14 +1,9 @@
-# calico
-
-Welcome to your new module. A short overview of the generated parts can be found
-in the [PDK documentation][1].
-
-The README template below provides a starting point with details about what
-information to include in your README.
+# Puppt Calico
 
 ## Table of Contents
 
 1. [Description](#description)
+1. [Supported Resources](#supported-resources)
 1. [Setup - The basics of getting started with calico](#setup)
     * [What calico affects](#what-calico-affects)
     * [Setup requirements](#setup-requirements)
@@ -19,11 +14,20 @@ information to include in your README.
 
 ## Description
 
-Briefly tell users why they might want to use your module. Explain what your
-module does and what kind of problems users can solve with it.
+This module manages [Calico](https://projectcalico.org/):
 
-This should be a fairly short description helps the user decide if your module
-is what they want.
+ * It runs [Felix](https://docs.projectcalico.org/reference/felix/) in a Docker container called `calico-node` via SystemD
+ * Optionally installs Calico dependencies Docker and etcd3
+ * Adds types and providers for managing a subset of Calico resources
+
+## Supported resources
+
+| Calico `kind`         | Puppet type                    |
+| --------------------- | ------------------------------ |
+| `Node`                | `calico_node`                  |
+| `HostEndpoint`        | `calico_host_endpoint`         |
+| `IPPool`              | `calico_ip_pool`               |
+| `GlobalNetworkPolicy` | `calico_global_network_policy` |
 
 ## Setup
 
