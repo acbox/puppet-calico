@@ -87,7 +87,6 @@ module Calico
         ipipMode:     should[:ipipmode],
         vxlanMode:    should[:vxlanmode],
         nodeSelector: should[:nodeselector],
-        ensure:       'present',
       }
     }
     Puppet::Util::Execution.execute("#{CALICOCTL} patch ippool #{should[:name]} -p '#{spec.to_json}'")
