@@ -34,7 +34,7 @@ calico_global_network_policy { 'web':
 
 This type provides Puppet with the capabilities to manage Calico global network policies.
 EOS
-  features: [],
+  features: [ 'canonicalize' ],
   attributes: {
     ensure: {
       type: 'Enum[present, absent]',

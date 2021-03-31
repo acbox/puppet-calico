@@ -58,6 +58,34 @@ describe 'calico install' do
     EOS
   end
 
+  let(:manifest_global_network_policy_string_port) do
+    <<-EOS
+    calico_global_network_policy { 'test-ports':
+      selector => 'role == "host"',
+      order    => 0,
+      types    => [ 'Ingress' ],
+      egress   => [],
+      ingress  => [
+        { action => 'Allow', protocol => 'UDP', destination => { ports => [ '3000' ] } },
+      ],
+    }
+    EOS
+  end
+
+  let(:manifest_global_network_policy_integer_port) do
+    <<-EOS
+    calico_global_network_policy { 'test-ports':
+      selector => 'role == "host"',
+      order    => 0,
+      types    => [ 'Ingress' ],
+      egress   => [],
+      ingress  => [
+        { action => 'Allow', protocol => 'UDP', destination => { ports => [ 3000 ] } },
+      ],
+    }
+    EOS
+  end
+
   it 'should apply without errors' do
     apply_manifest(manifest_calico, :catch_failures => true)
   end
@@ -99,6 +127,17 @@ describe 'calico install' do
   end
 
   it 'should apply a second time without changes' do
+    @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  # test canonicalize() 1/2
+  it 'should accept string port' do
+    @result = apply_manifest(manifest_global_network_policy_string_port, :catch_failures => true)
+  end
+
+  # test canonicalize() 2/2
+  it 'should accept integer without changes' do
     @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end

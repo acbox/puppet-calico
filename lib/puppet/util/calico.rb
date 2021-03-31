@@ -164,8 +164,8 @@ module Calico
       {
         name:             item.dig("metadata", "name"),
         order:            item.dig("spec", "order"),
-        ingress:          item.dig("spec", "ingress"),
-        egress:           item.dig("spec", "egress"),
+        ingress:          item.dig("spec", "ingress")||[],
+        egress:           item.dig("spec", "egress")||[],
         selector:         item.dig("spec", "selector"),
         types:            item.dig("spec", "types"),
         pre_dnat:         item.dig("spec", "preDNAT")||false,
