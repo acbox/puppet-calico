@@ -137,8 +137,8 @@ describe 'calico install' do
   end
 
   # test canonicalize() 2/2
-  it 'should accept integer without changes' do
-    @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
+  it 'should accept integer port without changes' do
+    @result = apply_manifest(manifest_global_network_policy_integer_port, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 end
