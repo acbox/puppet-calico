@@ -1,4 +1,4 @@
-# Puppt Calico
+# Puppet Calico
 
 ## Table of Contents
 
