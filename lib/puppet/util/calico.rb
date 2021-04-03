@@ -59,6 +59,7 @@ module Calico
         ipipMode:     should[:ipipmode],
         vxlanMode:    should[:vxlanmode],
         nodeSelector: should[:nodeselector],
+        natOutgoing:  should[:natoutgoing],
       }.to_json,
     )
     Puppet::Util::Execution.execute("echo '#{spec}' | #{CALICOCTL} create -f -")
@@ -74,6 +75,7 @@ module Calico
         ipipmode:     item.dig("spec", "ipipMode"),
         vxlanmode:    item.dig("spec", "vxlanMode"),
         nodeselector: item.dig("spec", "nodeSelector"),
+        natoutgoing:  item.dig("spec", "natOutgoing"),
         ensure:       'present',
       }
     end
@@ -87,6 +89,7 @@ module Calico
         ipipMode:     should[:ipipmode],
         vxlanMode:    should[:vxlanmode],
         nodeSelector: should[:nodeselector],
+        natOutgoing:  should[:natoutgoing],
       }
     }
     Puppet::Util::Execution.execute("#{CALICOCTL} patch ippool #{should[:name]} -p '#{spec.to_json}'")

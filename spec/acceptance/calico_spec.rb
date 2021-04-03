@@ -28,7 +28,7 @@ describe 'calico install' do
   let(:manifest_ippool) do
     <<-EOS
     calico_ip_pool { 'myippool':
-      cidr => '10.0.2.0/24', # https://www.virtualbox.org/manual/UserManual.html#nat-address-config
+      cidr => '10.10.1.0/24',
     }
     EOS
   end
@@ -36,7 +36,7 @@ describe 'calico install' do
   let(:manifest_host_endpoint) do
     <<-EOS
     calico_host_endpoint { 'vagrant':
-      expectedips => ['10.0.2.15'],
+      expectedips => ['10.0.2.15'], # https://www.virtualbox.org/manual/UserManual.html#nat-address-config
       node        => 'vagrant',
       labels      => { 'role' => 'host' }
     }

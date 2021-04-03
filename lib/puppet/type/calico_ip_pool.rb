@@ -49,5 +49,10 @@ EOS
       desc: 'Selects the nodes that Calico IPAM should assign addresses from this pool to.',
       default: 'all()',
     },
+    natoutgoing: {
+      type: 'Boolean',
+      desc: 'When enabled, packets sent from Calico networked containers in this pool to destinations outside of this pool will be masqueraded.',
+      default: false,
+    },
   },
 )
