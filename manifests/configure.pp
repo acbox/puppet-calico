@@ -4,7 +4,9 @@
 #
 # @example
 #   include calico::configure
-class calico::configure {
+class calico::configure (
+  String $nodename,
+) {
 
   # Configure calicoctl to connect to etcdv3 on localhost
 
@@ -32,7 +34,7 @@ class calico::configure {
     mode    => '0755',
     # VERY important that you do *NOT* add a trailing newline otherwise node name will not be recognised, you
     # will see an error along these lines in the allocation logs coming from the calico CNI plugin
-    content => $::fqdn,
+    content => $nodename,
   }
 
   # Environment variables used by Felix Docker container, calico-node
@@ -44,7 +46,7 @@ class calico::configure {
     content => @("CONF")
       DATASTORE_TYPE=etcdv3
       ETCD_ENDPOINTS=http://127.0.0.1:2379
-      CALICO_NODENAME="${::fqdn}"
+      CALICO_NODENAME="${nodename}"
       NO_DEFAULT_POOLS="true"
       CALICO_IP=""
       CALICO_IP6=""
