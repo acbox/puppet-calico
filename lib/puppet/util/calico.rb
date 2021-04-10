@@ -197,12 +197,54 @@ module Calico
   end
 
   #
+  # Felix Configuration
+  #
+
+  def calicoctl_create_felix_configuration(should)
+    spec = sprintf(
+      '{"apiVersion":"projectcalico.org/v3","kind":"FelixConfiguration","metadata":{"name":%s},' +
+      '"spec":{"defaultEndpointToHostAction":%s}}',
+      should[:name].to_json,
+      should[:default_endpoint_to_host_action].to_json,
+    )
+    Puppet::Util::Execution.execute("echo '#{spec}' | #{CALICOCTL} create -f -")
+  end
+
+  def calicoctl_get_felix_configuration(*)
+    out = JSON.parse(Puppet::Util::Execution.execute("#{CALICOCTL} get felixconfiguration -o json"))
+    return out["items"].map do |item|
+      {
+        name:                            item.dig("metadata", "name"),
+        default_endpoint_to_host_action: item.dig("spec", "defaultEndpointToHostAction"),
+        ensure:                          'present',
+      }
+    end
+  end
+
+  def calicoctl_patch_felix_configuration(should)
+    spec = {
+      "spec" => {
+        "defaultEndpointToHostAction" => should[:default_endpoint_to_host_action],
+      }
+    }
+    Puppet::Util::Execution.execute("#{CALICOCTL} patch felixconfiguration #{should[:name]} -p '#{spec.to_json}'")
+  end
+
+  def calicoctl_delete_felix_configuration(name)
+    Puppet::Util::Execution.execute("#{CALICOCTL} delete felixconfiguration #{name}")
+  end
+
+  #
   # Helper
   #
 
+  SUPPORTED_ACTIONS = [
+    :node, :ip_pool, :host_endpoint, :global_network_policy, :felix_configuration
+  ]
+
   def calicoctl(action, kind, arg = nil)
     raise "Unknown action: #{action.to_s}" unless [:create, :get, :patch, :delete].include? action
-    raise "Unknown kind: #{kind.to_s}" unless [:node, :ip_pool, :host_endpoint, :global_network_policy].include? kind
+    raise "Unknown kind: #{kind.to_s}" unless SUPPORTED_ACTIONS.include? kind
     begin
       send("calicoctl_#{action}_#{kind}", arg)
     rescue StandardError => e

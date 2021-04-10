@@ -28,6 +28,7 @@ This module manages [Calico](https://projectcalico.org/):
 | `HostEndpoint`        | `calico_host_endpoint`         |
 | `IPPool`              | `calico_ip_pool`               |
 | `GlobalNetworkPolicy` | `calico_global_network_policy` |
+| `FelixConfiguration`  | `calico_felix_configuration`   |
 
 ## Setup
 

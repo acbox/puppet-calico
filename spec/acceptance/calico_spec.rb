@@ -86,6 +86,14 @@ describe 'calico install' do
     EOS
   end
 
+  let(:manifest_felix_configuration) do
+    <<-EOS
+    calico_felix_configuration { 'felix-config':
+      default_endpoint_to_host_action=> 'Accept',
+    }
+    EOS
+  end
+
   it 'should apply without errors' do
     apply_manifest(manifest_calico, :catch_failures => true)
   end
@@ -139,6 +147,15 @@ describe 'calico install' do
   # test canonicalize() 2/2
   it 'should accept integer port without changes' do
     @result = apply_manifest(manifest_global_network_policy_integer_port, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  it 'should apply without errors' do
+    @result = apply_manifest(manifest_felix_configuration, :catch_failures => true)
+  end
+
+  it 'should apply a second time without changes' do
+    @result = apply_manifest(manifest_felix_configuration, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 end
