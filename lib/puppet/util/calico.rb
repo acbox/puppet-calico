@@ -75,7 +75,7 @@ module Calico
         ipipmode:     item.dig("spec", "ipipMode"),
         vxlanmode:    item.dig("spec", "vxlanMode"),
         nodeselector: item.dig("spec", "nodeSelector"),
-        natoutgoing:  item.dig("spec", "natOutgoing"),
+        natoutgoing:  item.dig("spec", "natOutgoing") == 'true',
         ensure:       'present',
       }
     end
