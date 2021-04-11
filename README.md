@@ -29,6 +29,7 @@ This module manages [Calico](https://projectcalico.org/):
 | `IPPool`              | `calico_ip_pool`               |
 | `GlobalNetworkPolicy` | `calico_global_network_policy` |
 | `FelixConfiguration`  | `calico_felix_configuration`   |
+| `Profile`             | `calico_profile`               |
 
 ## Testing
 
