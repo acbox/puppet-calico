@@ -94,68 +94,86 @@ describe 'calico install' do
     EOS
   end
 
-  it 'should apply without errors' do
+  let(:manifest_profile) do
+    <<-EOS
+    calico_profile { 'profile':
+      egress   => [],
+      ingress  => [],
+    }
+    EOS
+  end
+
+  it 'should apply calico class without errors' do
     apply_manifest(manifest_calico, :catch_failures => true)
   end
 
-  it 'should apply a second time without changes' do
+  it 'should apply calico class a second time without changes' do
     @result = apply_manifest(manifest_calico, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 
-  it 'should apply without errors' do
+  it 'should apply node type without errors' do
     apply_manifest(manifest_node, :catch_failures => true)
   end
 
-  it 'should apply a second time without changes' do
+  it 'should apply node type a second time without changes' do
     @result = apply_manifest(manifest_node, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 
-  it 'should apply without errors' do
+  it 'should apply ippool type without errors' do
     apply_manifest(manifest_ippool, :catch_failures => true)
   end
 
-  it 'should apply a second time without changes' do
+  it 'should apply ippool type a second time without changes' do
     @result = apply_manifest(manifest_ippool, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 
-  it 'should apply without errors' do
+  it 'should apply host endpoint type without errors' do
     apply_manifest(manifest_host_endpoint, :catch_failures => true)
   end
 
-  it 'should apply a second time without changes' do
+  it 'should apply host endpoint type a second time without changes' do
     @result = apply_manifest(manifest_host_endpoint, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 
-  it 'should apply without errors' do
+  it 'should apply global network policy type without errors' do
     @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
   end
 
-  it 'should apply a second time without changes' do
+  it 'should apply global network policy type a second time without changes' do
     @result = apply_manifest(manifest_global_network_policy, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 
   # test canonicalize() 1/2
-  it 'should accept string port' do
+  it 'should accept string port in global network policy type' do
     @result = apply_manifest(manifest_global_network_policy_string_port, :catch_failures => true)
   end
 
   # test canonicalize() 2/2
-  it 'should accept integer port without changes' do
+  it 'should accept integer port without changes in global network policy type' do
     @result = apply_manifest(manifest_global_network_policy_integer_port, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 
-  it 'should apply without errors' do
+  it 'should apply felix configuration type without errors' do
     @result = apply_manifest(manifest_felix_configuration, :catch_failures => true)
   end
 
-  it 'should apply a second time without changes' do
+  it 'should apply felix configuration type a second time without changes' do
     @result = apply_manifest(manifest_felix_configuration, :catch_failures => true)
+    expect(@result.exit_code).to be_zero
+  end
+
+  it 'should apply profile type without errors' do
+    @result = apply_manifest(manifest_profile, :catch_failures => true)
+  end
+
+  it 'should apply profile type a second time without changes' do
+    @result = apply_manifest(manifest_profile, :catch_failures => true)
     expect(@result.exit_code).to be_zero
   end
 end

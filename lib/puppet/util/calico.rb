@@ -235,11 +235,52 @@ module Calico
   end
 
   #
+  # Profile
+  #
+
+  def calicoctl_create_profile(should)
+    spec = sprintf(
+      '{"apiVersion":"projectcalico.org/v3","kind":"Profile","metadata":{"name":%s},' +
+      '"spec":{"ingress":%s,"egress":%s}}',
+      should[:name].to_json,
+      should[:ingress].to_json,
+      should[:egress].to_json,
+    )
+    Puppet::Util::Execution.execute("echo '#{spec}' | #{CALICOCTL} create -f -")
+  end
+
+  def calicoctl_get_profile(*)
+    out = JSON.parse(Puppet::Util::Execution.execute("#{CALICOCTL} get profile -o json"))
+    return out["items"].map do |item|
+      {
+        name:    item.dig("metadata", "name"),
+        ingress: item.dig("spec", "ingress")||[],
+        egress:  item.dig("spec", "egress")||[],
+        ensure:  'present',
+      }
+    end
+  end
+
+  def calicoctl_patch_profile(should)
+    spec = {
+      "spec" => {
+        "ingress" => should[:ingress],
+        "egress"  => should[:egress],
+      }
+    }
+    Puppet::Util::Execution.execute("#{CALICOCTL} patch profile #{should[:name]} -p '#{spec.to_json}'")
+  end
+
+  def calicoctl_delete_profile(name)
+    Puppet::Util::Execution.execute("#{CALICOCTL} delete profile #{name}")
+  end
+
+  #
   # Helper
   #
 
   SUPPORTED_ACTIONS = [
-    :node, :ip_pool, :host_endpoint, :global_network_policy, :felix_configuration
+    :node, :ip_pool, :host_endpoint, :global_network_policy, :felix_configuration, :profile
   ]
 
   def calicoctl(action, kind, arg = nil)
